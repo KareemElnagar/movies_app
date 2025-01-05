@@ -219,6 +219,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.0"
+  movie_ticket_card:
+    dependency: "direct main"
+    description:
+      name: movie_ticket_card
+      sha256: a223e2fd5f2129c18a8a7f7a5f349e954c3ca758c4964f645d4ac870c724aab7
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   path:
     dependency: transitive
     description:

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies_app/utils/colors.dart';
@@ -38,13 +37,13 @@ class NotificationItem extends StatelessWidget {
       ),
       subtitle: Text(
         notification.description,
-        style: TextStyle(
+        style: const TextStyle(
           color: AppColors.text,
         ),
       ),
       trailing: Text(
         notification.time,
-        style: TextStyle(
+        style: const TextStyle(
           color: AppColors.text,
           fontSize: 12,
         ),

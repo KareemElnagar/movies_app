@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
 import 'MovieCard.dart';
@@ -28,7 +27,7 @@ class FavoritePage extends StatelessWidget with MoviePosters {
                 // No action needed (UI-only)
               },
             );
-          }).toList(),
+          }),
         ],
       ),
     );

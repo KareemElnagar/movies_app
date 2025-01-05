@@ -1,4 +1,5 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies_app/Screens/CinemaPage.dart';
@@ -7,6 +8,7 @@ import 'package:movies_app/utils/Movie.dart';
 import 'package:movies_app/utils/NotificationMenu.dart';
 import 'package:movies_app/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'MyTicketPage.dart';
 import 'ProfilePage.dart';
 
 class HomePage extends StatefulWidget {
@@ -51,9 +53,9 @@ class _HomePage extends State<HomePage> with MoviePosters {
         backgroundColor: AppColors.background,
         actions: [
           PopupMenuTheme(
-            data: PopupMenuThemeData(color: AppColors.background),
+            data: const PopupMenuThemeData(color: AppColors.background),
             child: PopupMenuButton<NotificationMenuModel>(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.bell,
                 color: AppColors.text,
               ), // Notification icon
@@ -79,13 +81,13 @@ class _HomePage extends State<HomePage> with MoviePosters {
                       ),
                       subtitle: Text(
                         notification.description,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.grey,
                         ),
                       ),
                       trailing: Text(
                         notification.time,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.text,
                           fontSize: 12,
                         ),
@@ -96,7 +98,9 @@ class _HomePage extends State<HomePage> with MoviePosters {
               },
               onSelected: (notification) {
                 // Handle notification selection
-                print('Selected Notification: ${notification.title}');
+                if (kDebugMode) {
+                  print('Selected Notification: ${notification.title}');
+                }
               },
             ),
           ),
@@ -191,7 +195,10 @@ class _HomePage extends State<HomePage> with MoviePosters {
         child: const FaIcon(FontAwesomeIcons.ticket),
         onPressed: () {
           // Action for Floating Action Button
-          // Navigator.of(context).push(TicketPage())
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyTicketPage()),
+          );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
