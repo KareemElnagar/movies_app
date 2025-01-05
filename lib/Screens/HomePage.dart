@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies_app/Screens/CinemaPage.dart';
 import 'package:movies_app/Screens/FavouritePage.dart';
+import 'package:movies_app/Screens/seat_selection_page.dart';
 import 'package:movies_app/utils/Movie.dart';
 import 'package:movies_app/utils/NotificationMenu.dart';
 import 'package:movies_app/utils/colors.dart';
@@ -324,6 +325,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ElevatedButton(
                           onPressed: () {
                             // Add button action here
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SeatSelectionPage()),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
