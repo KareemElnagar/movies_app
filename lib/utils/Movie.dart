@@ -1,9 +1,19 @@
 class Movie {
   final String title;
-  final String subtitle;
+  final String genre;
   final String duration;
   final String summary;
   final String imagePath;
+  final double rating;
+  final int year;
 
-  Movie(this.title, this.subtitle, this.duration, this.summary, this.imagePath);
+  Movie({
+    required this.title,
+    required this.genre,
+    required this.duration,
+    required this.summary,
+    required this.imagePath,
+    required this.rating,
+    required this.year,
+  });
 }

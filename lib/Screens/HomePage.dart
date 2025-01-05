@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movies_app/Screens/CinemaPage.dart';
 import 'package:movies_app/Screens/FavouritePage.dart';
 import 'package:movies_app/utils/Movie.dart';
 import 'package:movies_app/utils/colors.dart';
@@ -26,10 +27,10 @@ class _HomePage extends State<HomePage> {
   ];
 
   final _pages = [
-     HomeScreen(),
-     ProfilePage(),
-     FavoritePage(),
-     ProfilePage(),
+    HomeScreen(),
+    CinemaPage(),
+    FavoritePage(),
+    ProfilePage(),
   ];
 
   @override
@@ -155,7 +156,17 @@ class HomeScreen extends StatefulWidget with MoviePosters {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _carousalIndex = 0;
-  Set<int> favorites = {}; // Track favorite movies
+  final Set<int> _favorites = {}; // Local favorites list
+
+  void _toggleFavorite(int index) {
+    setState(() {
+      if (_favorites.contains(index)) {
+        _favorites.remove(index);
+      } else {
+        _favorites.add(index);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      movie.subtitle,
+                      movie.genre,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -268,19 +279,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 16),
                         IconButton(
                           icon: Icon(
-                            favorites.contains(_carousalIndex)
+                            _favorites.contains(_carousalIndex)
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             color: Colors.red,
                           ),
                           onPressed: () {
-                            setState(() {
-                              if (favorites.contains(_carousalIndex)) {
-                                favorites.remove(_carousalIndex);
-                              } else {
-                                favorites.add(_carousalIndex);
-                              }
-                            });
+                            _toggleFavorite(_carousalIndex);
                           },
                         ),
                       ],
@@ -298,14 +303,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
 mixin MoviePosters {
   final List<Movie> moviePosters = [
-    Movie('Oppenheimer', 'Drama', 'Duration: 1h 46m', "Summary",
-        'images/opennhimer.jpg'),
-    Movie('Blade runner', 'Drama', 'Duration: 2h 55m', "Summary",
-        'images/bladerunner.jpg'),
-    Movie('Joker', 'Drama, Action', 'Duration: 1h 22m', "Summary", 'images/joker.jpg'),
-    Movie('Gladiator', 'Action', 'Duration: 2h 46m', "Summary",
-        'images/gladiator.jpg'),
     Movie(
-        'Matrix', 'Action', 'Duration: 1h 57m', "Summary", 'images/matrix.jpg'),
+        title: 'Oppenheimer',
+        genre: 'Drama',
+        duration: 'Duration: 1h 46m',
+        summary: "Summary",
+        imagePath: 'images/opennhimer.jpg',
+        rating: 4.8,
+        year: 2022),
+    Movie(
+        title: 'Blade runner',
+        genre: 'Drama',
+        duration: 'Duration: 2h 55m',
+        summary: "Summary",
+        imagePath: 'images/bladerunner.jpg',
+        rating: 4.8,
+        year: 2022),
+    Movie(
+        title: 'Joker',
+        genre: 'Drama, Action',
+        duration: 'Duration: 1h 22m',
+        summary: "Summary",
+        imagePath: 'images/joker.jpg',
+        rating: 4.8,
+        year: 2022),
+    Movie(
+        title: 'Gladiator',
+        genre: 'Action',
+        duration: 'Duration: 2h 46m',
+        summary: "Summary",
+        imagePath: 'images/gladiator.jpg',
+        rating: 4.8,
+        year: 2022),
+    Movie(
+        title: 'Matrix',
+        genre: 'Action',
+        duration: 'Duration: 1h 57m',
+        summary: "Summary",
+        imagePath: 'images/matrix.jpg',
+        rating: 4.8,
+        year: 2022),
   ];
 }

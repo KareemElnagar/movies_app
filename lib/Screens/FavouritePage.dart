@@ -3,16 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
 import 'HomePage.dart';
+import 'MovieCard.dart';
 
-class FavoritePage extends StatefulWidget with MoviePosters {
+class FavoritePage extends StatelessWidget with MoviePosters {
    FavoritePage({super.key});
-
-  @override
-  State<FavoritePage> createState() => _FavoritePageState();
-}
-
-class _FavoritePageState extends State<FavoritePage> {
-  Set<int> favorites = {0, 2}; // Example: Indices of favorite movies
 
   @override
   Widget build(BuildContext context) {
@@ -21,35 +15,27 @@ class _FavoritePageState extends State<FavoritePage> {
         title: const Text('Favorites'),
         backgroundColor: AppColors.background,
       ),
-      body: ListView.builder(
-        itemCount: widget.moviePosters.length,
-        itemBuilder: (context, index) {
-          if (!favorites.contains(index)) {
-            return const SizedBox.shrink(); // Skip non-favorite movies
-          }
-          final movie = widget.moviePosters[index];
-          return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                movie.imagePath,
-                fit: BoxFit.cover,
-                width: 50,
-                height: 50,
+      body: ListView(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'Top Movies',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            title: Text(movie.title),
-            subtitle: Text(movie.subtitle),
-            trailing: IconButton(
-              icon: const Icon(Icons.favorite, color: Colors.red),
-              onPressed: () {
-                setState(() {
-                  favorites.remove(index); // Remove from favorites
-                });
+          ),
+          ...moviePosters.map((movie) {
+            return MovieCard(
+              movie: movie,
+              onRemoveFavorite: () {
+                // No action needed (UI-only)
               },
-            ),
-          );
-        },
+            );
+          }).toList(),
+        ],
       ),
     );
   }
