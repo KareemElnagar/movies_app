@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/colors.dart';
 import 'HomePage.dart';
 import 'MovieCard.dart';
 
@@ -11,10 +9,6 @@ class FavoritePage extends StatelessWidget with MoviePosters {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorites'),
-        backgroundColor: AppColors.background,
-      ),
       body: ListView(
         children: [
           const Padding(

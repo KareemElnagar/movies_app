@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies_app/Screens/CinemaPage.dart';
 import 'package:movies_app/Screens/FavouritePage.dart';
 import 'package:movies_app/utils/Movie.dart';
+import 'package:movies_app/utils/NotificationMenu.dart';
 import 'package:movies_app/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'ProfilePage.dart';
@@ -15,10 +16,11 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePage();
 }
 
-class _HomePage extends State<HomePage> {
+class _HomePage extends State<HomePage> with MoviePosters {
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
 
   int _currentIndex = 0; // Track the selected index
+
   final _iconList = [
     FontAwesomeIcons.house,
     FontAwesomeIcons.film,
@@ -48,15 +50,66 @@ class _HomePage extends State<HomePage> {
         ),
         backgroundColor: AppColors.background,
         actions: [
-          IconButton(
-            color: Colors.white,
-            icon: const FaIcon(FontAwesomeIcons.bell),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Notifications clicked")),
-              );
-            },
+          PopupMenuTheme(
+            data: PopupMenuThemeData(color: AppColors.background),
+            child: PopupMenuButton<NotificationMenuModel>(
+              icon: Icon(
+                FontAwesomeIcons.bell,
+                color: AppColors.text,
+              ), // Notification icon
+              itemBuilder: (context) {
+                return notifications.map((notification) {
+                  return PopupMenuItem(
+                    value: notification,
+                    child: ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.bell,
+                        color: notification.isRead
+                            ? Colors.white
+                            : AppColors.primary,
+                      ),
+                      title: Text(
+                        notification.title,
+                        style: TextStyle(
+                          fontWeight: notification.isRead
+                              ? FontWeight.normal
+                              : FontWeight.bold,
+                          color: AppColors.text,
+                        ),
+                      ),
+                      subtitle: Text(
+                        notification.description,
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      trailing: Text(
+                        notification.time,
+                        style: TextStyle(
+                          color: AppColors.text,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList();
+              },
+              onSelected: (notification) {
+                // Handle notification selection
+                print('Selected Notification: ${notification.title}');
+              },
+            ),
           ),
+          // IconButton(
+          //   color: Colors.white,
+          //   icon: const FaIcon(FontAwesomeIcons.bell),
+          //   onPressed: () {
+          //
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       const SnackBar(content: Text("Notifications clicked")),
+          //     );
+          //   },
+          // ),
           IconButton(
             color: Colors.white,
             icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
@@ -148,7 +201,7 @@ class _HomePage extends State<HomePage> {
 }
 
 class HomeScreen extends StatefulWidget with MoviePosters {
-   HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -343,5 +396,24 @@ mixin MoviePosters {
         imagePath: 'images/matrix.jpg',
         rating: 4.8,
         year: 2022),
+  ];
+
+  final List<NotificationMenuModel> notifications = [
+    NotificationMenuModel(
+      title: 'New Movie Release',
+      description: 'Black Adam is now available in your area.',
+      time: '2h ago',
+    ),
+    NotificationMenuModel(
+      title: 'Special Offer',
+      description: 'Get 50% off on your next booking.',
+      time: '1d ago',
+      isRead: true,
+    ),
+    NotificationMenuModel(
+      title: 'Reminder',
+      description: 'Your booking for The Northman starts in 1 hour.',
+      time: '3d ago',
+    ),
   ];
 }
