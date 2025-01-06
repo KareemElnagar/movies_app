@@ -41,6 +41,7 @@ dependencies:
   book_my_seat: ^1.0.1
   carousel_slider: ^5.0.0
   movie_ticket_card: ^0.0.1
+  flutter_native_splash: ^2.3.1
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +56,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+flutter_native_splash:
+  color: "#000000"  # Background color of the splash screen
+  image: images/splash.png  # Path to your splash screen logo
+  android: true
+  ios: true
 # The following section is specific to Flutter packages.
 flutter:
 
