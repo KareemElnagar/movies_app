@@ -5,6 +5,8 @@ import '../utils/Movie.dart';
 import '../utils/colors.dart';
 
 class CinemaPage extends StatelessWidget with MoviePosters {
+   CinemaPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,16 +36,16 @@ class CinemaPage extends StatelessWidget with MoviePosters {
               height: 250,
             ),
           ),
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             'San Stefano Cinema',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
-          Row(
+          const SizedBox(height: 8),
+          const Row(
             children: [
               Icon(Icons.star, color: Colors.amber, size: 16),
               SizedBox(width: 4),
@@ -92,10 +94,10 @@ class CinemaPage extends StatelessWidget with MoviePosters {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, color: Colors.blue),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.grey,
           ),
@@ -108,8 +110,8 @@ class CinemaPage extends StatelessWidget with MoviePosters {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
+        const Padding(
+          padding: EdgeInsets.all(16),
           child: Text(
             'Now Showing',
             style: TextStyle(
@@ -138,7 +140,7 @@ class CinemaPage extends StatelessWidget with MoviePosters {
       margin: const EdgeInsets.only(right: 16),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Container(
+        child: SizedBox(
           width: 150,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,27 +158,27 @@ class CinemaPage extends StatelessWidget with MoviePosters {
                   children: [
                     Text(
                       movie.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       '${movie.year}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.star, color: Colors.amber, size: 16),
-                        SizedBox(width: 4),
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
+                        const SizedBox(width: 4),
                         Text(
                           '${movie.rating}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
@@ -208,7 +210,7 @@ class CinemaPage extends StatelessWidget with MoviePosters {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        child: Text(
+        child: const Text(
           'Book Here',
           style: TextStyle(
             fontSize: 18,
