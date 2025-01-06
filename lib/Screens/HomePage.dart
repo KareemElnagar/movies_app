@@ -272,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       movie.imagePath,
                       fit: BoxFit.cover,
                       height: 350,
-                      width: 200,
+                      width: 350,
                     ),
                   );
                 },
@@ -283,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       movie.title,
@@ -355,6 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -369,47 +370,51 @@ class _HomeScreenState extends State<HomeScreen> {
 mixin MoviePosters {
   final List<Movie> moviePosters = [
     Movie(
-        title: 'Oppenheimer',
-        genre: 'Drama',
-        duration: 'Duration: 1h 46m',
-        summary: "Summary",
-        imagePath: 'images/opennhimer.jpg',
-        rating: 4.8,
-        year: 2022),
+      title: 'Oppenheimer',
+      genre: 'Biography, Drama, History', // Corrected genre
+      duration: 'Duration: 3h 00m', // Corrected duration
+      summary: "A biographical thriller about J. Robert Oppenheimer, the physicist who led the Manhattan Project to develop the atomic bomb during World War II.",
+      imagePath: 'images/opennhimer.jpg',
+      rating: 4.5, // Adjusted rating
+      year: 2023, // Corrected year
+    ),
     Movie(
-        title: 'Blade runner',
-        genre: 'Drama',
-        duration: 'Duration: 2h 55m',
-        summary: "Summary",
-        imagePath: 'images/bladerunner.jpg',
-        rating: 4.8,
-        year: 2022),
+      title: 'Blade Runner',
+      genre: 'Sci-Fi, Thriller', // Corrected genre
+      duration: 'Duration: 1h 57m', // Corrected duration
+      summary: "A sci-fi classic set in a dystopian future where a blade runner must track down and retire rogue replicants, exploring themes of humanity and identity.",
+      imagePath: 'images/bladerunner.jpg',
+      rating: 4.7, // Adjusted rating
+      year: 2017, // Corrected year
+    ),
     Movie(
-        title: 'Joker',
-        genre: 'Drama, Action',
-        duration: 'Duration: 1h 22m',
-        summary: "Summary",
-        imagePath: 'images/joker.jpg',
-        rating: 4.8,
-        year: 2022),
+      title: 'Joker',
+      genre: 'Crime, Drama, Thriller', // Corrected genre
+      duration: 'Duration: 2h 02m', // Corrected duration
+      summary: "A gritty origin story of the iconic Batman villain, following Arthur Fleck's descent into madness and chaos in Gotham City.",
+      imagePath: 'images/joker.jpg',
+      rating: 4.6, // Adjusted rating
+      year: 2019, // Corrected year
+    ),
     Movie(
-        title: 'Gladiator',
-        genre: 'Action',
-        duration: 'Duration: 2h 46m',
-        summary: "Summary",
-        imagePath: 'images/gladiator.jpg',
-        rating: 4.8,
-        year: 2022),
+      title: 'Gladiator',
+      genre: 'Action, Adventure, Drama', // Corrected genre
+      duration: 'Duration: 2h 35m', // Corrected duration
+      summary: "A Roman general is betrayed and seeks revenge in the gladiatorial arena, fighting for justice and honor in ancient Rome.",
+      imagePath: 'images/gladiator.jpg',
+      rating: 4.8, // Adjusted rating
+      year: 2000, // Corrected year
+    ),
     Movie(
-        title: 'Matrix',
-        genre: 'Action',
-        duration: 'Duration: 1h 57m',
-        summary: "Summary",
-        imagePath: 'images/matrix.jpg',
-        rating: 4.8,
-        year: 2022),
+      title: 'Matrix',
+      genre: 'Action, Sci-Fi', // Corrected genre
+      duration: 'Duration: 2h 16m', // Corrected duration
+      summary: "A hacker discovers the truth about reality and joins a rebellion against machines that have enslaved humanity in a simulated world.",
+      imagePath: 'images/matrix.jpg',
+      rating: 4.7, // Adjusted rating
+      year: 1999, // Corrected year
+    ),
   ];
-
   final List<NotificationMenuModel> notifications = [
     NotificationMenuModel(
       title: 'New Movie Release',

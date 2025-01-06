@@ -27,9 +27,9 @@ class _MyApp extends State<MyApp> {
                 bodyLarge: GoogleFonts.quicksand(
                     textStyle: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
                 bodyMedium: GoogleFonts.quicksand(
-                    textStyle: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+                    textStyle: TextStyle(color: AppColors.primary)),
               bodySmall: GoogleFonts.quicksand(
-                    textStyle: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+                    textStyle: TextStyle(color: AppColors.primary,)),
             )
         ),
         home: Scaffold(

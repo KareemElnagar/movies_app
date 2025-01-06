@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:book_my_seat/book_my_seat.dart';
 import 'package:movies_app/utils/colors.dart';
 
+import '../utils/custom_paint.dart';
+
 class SeatSelectionPage extends StatefulWidget {
   const SeatSelectionPage({super.key});
 
@@ -68,7 +70,6 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                               _getDayOfWeek(date.weekday),
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
                                 color: selectedDateIndex == index
                                     ? Colors.white
                                     : Colors.black,
@@ -94,19 +95,23 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
               const SizedBox(height: 16),
               Center(
                 child: Container(
-                  width: 320, // Width of the line
-                  height: 5,  // Height of the line
+                  width: 320,
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: AppColors.primary, // Color of the line
-                    borderRadius: BorderRadius.circular(2.5), // Rounded corners
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.orange.withOpacity(0.7), // Glow color
-                        spreadRadius: 3, // Spread of the glow
-                        blurRadius: 7, // Blur radius of the glow
-                        offset: const Offset(0, 0), // Changes position of shadow
+                        color: Colors.orange.withOpacity(0.2),
+                        spreadRadius: 3,
+                        blurRadius: 50,
+                        offset: const Offset(0, 0),
                       ),
                     ],
+                  ),
+                  child: const CurvedLine(
+                    width: 320,
+                    height: 2,
+                    color: AppColors.primary,
+                    strokeWidth: 5,
                   ),
                 ),
               ),
@@ -124,135 +129,136 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
               // Seat Layout
               SeatLayoutWidget(
                 stateModel: const SeatLayoutStateModel(
+
                   rows: 10,
                   cols: 7,
-                  seatSvgSize: 30,
-                  pathSelectedSeat: 'images/seat.svg',
+                  seatSvgSize: 45,
+                  pathSelectedSeat: 'images/seatselected.svg',
                   pathSoldSeat: 'images/seat.svg',
                   pathDisabledSeat: 'images/seat.svg',
                   currentSeatsState: [
                     [
-                      SeatState.disabled,
+                      SeatState.sold,
                       SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.empty,
                       SeatState.unselected,
                       SeatState.unselected,
                       SeatState.sold,
+                      SeatState.unselected,
                       SeatState.sold,
+                      SeatState.unselected,
                       SeatState.sold,
-                      SeatState.sold,
+                      SeatState.unselected,
                     ],
                     [
-                      SeatState.disabled,
                       SeatState.unselected,
-                      SeatState.unselected,
+                      SeatState.sold,
                       SeatState.empty,
+                      SeatState.disabled,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
                       SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
+                      SeatState.unselected,
                     ],
                     [
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.empty,
                       SeatState.disabled,
                       SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.empty,
-                      SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
                       SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
+                      SeatState.unselected,
                     ],
                     [
-                      SeatState.disabled,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.empty,
+                      SeatState.disabled,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
                     ],
                     [
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.empty,
                       SeatState.disabled,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
-                      SeatState.empty,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
                     ],
                     [
-                      SeatState.disabled,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
                       SeatState.empty,
+                      SeatState.disabled,
+                      SeatState.sold,
                       SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
                     ],
                     [
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.empty,
                       SeatState.disabled,
                       SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.empty,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
                     ],
                     [
-                      SeatState.disabled,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
                       SeatState.empty,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
+                      SeatState.disabled,
                     ],
                     [
-                      SeatState.disabled,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
+                      SeatState.unselected,
+                      SeatState.sold,
                       SeatState.empty,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
-                      SeatState.sold,
                     ],
                     [
+                      SeatState.empty,
                       SeatState.disabled,
                       SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.empty,
-                      SeatState.unselected,
+                      SeatState.sold,
                       SeatState.unselected,
                       SeatState.sold,
+                      SeatState.unselected,
                       SeatState.sold,
-                      SeatState.sold,
+                      SeatState.unselected,
                       SeatState.sold,
                     ],
                   ],
-                  pathUnSelectedSeat: 'images/seat.svg',
+                  pathUnSelectedSeat: 'images/seatwhite.svg',
                 ),
                 onSeatStateChanged:
                     (int rowI, int colI, SeatState currentState) {},
@@ -271,7 +277,7 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
               const SizedBox(height: 16),
               Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(45), // Circular edges
+                  borderRadius: BorderRadius.circular(15), // Circular edges
                 ),
                 color: Colors.grey[800], // Grey background color
                 child: Padding(
