@@ -75,27 +75,36 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocBuilder<ShowCubit, ShowState>(
       builder: (context, state) {
         if (state is ShowLoaded) {
-          return Column(
-            children: [
-              CarouselSlider.builder(
-                itemCount: state.shows.length,
-                options: CarouselOptions(
-                  height: 400,
-                  viewportFraction: 0.65,
-                  enableInfiniteScroll: true,
-                  autoPlay: false,
-                  enlargeCenterPage: true,
-                  onPageChanged: (index, reason) =>
-                      setState(() => _carouselIndex = index),
+          return GestureDetector(
+            onTap: (){
+              final movie = state.shows[_carouselIndex];
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ShowDetailsPage(movie: movie,)),
+              );
+            },
+            child: Column(
+              children: [
+                CarouselSlider.builder(
+                  itemCount: state.shows.length,
+                  options: CarouselOptions(
+                    height: 400,
+                    viewportFraction: 0.65,
+                    enableInfiniteScroll: true,
+                    autoPlay: false,
+                    enlargeCenterPage: true,
+                    onPageChanged: (index, reason) =>
+                        setState(() => _carouselIndex = index),
+                  ),
+                  itemBuilder: (context, index, realIndex) {
+                    final movie = state.shows[index];
+                    return _buildMoviePoster(movie);
+                  },
                 ),
-                itemBuilder: (context, index, realIndex) {
-                  final movie = state.shows[index];
-                  return _buildMoviePoster(movie);
-                },
-              ),
-              const SizedBox(height: 10),
-              Text('Page ${_carouselIndex + 1} of ${state.shows.length}'),
-            ],
+                const SizedBox(height: 10),
+                Text('Page ${_carouselIndex + 1} of ${state.shows.length}'),
+              ],
+            ),
           );
         } else {
           return const Center(child: CircularProgressIndicator());
