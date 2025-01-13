@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/Screens/HomePage.dart';
+import 'package:movies_app/cubit/show_cubit.dart';
+import 'package:movies_app/models/show_models.dart';
+import 'package:movies_app/utils/colors.dart';
 
-import '../utils/Movie.dart';
-import '../utils/colors.dart';
-
-class CinemaPage extends StatelessWidget with MoviePosters {
-   CinemaPage({super.key});
+class CinemaPage extends StatelessWidget {
+  const CinemaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -120,36 +121,57 @@ class CinemaPage extends StatelessWidget with MoviePosters {
             ),
           ),
         ),
-        SizedBox(
-          height: 220,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            children: moviePosters.map((movie) {
-              return _buildMovieCard(movie);
-            }).toList(),
-          ),
+        BlocBuilder<ShowCubit, ShowState>(
+          builder: (context, state) {
+            if (state is ShowLoaded) {
+              return SizedBox(
+                height: 300,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: state.shows.map((movie) {
+                    return _buildMovieCard(movie);
+                  }).toList(),
+                ),
+              );
+            }
+            else if (state is ShowLoadFailed) {
+              return Center(
+                child: Text('Failed to load movies: ${state.message}'),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ],
     );
   }
 
-  Widget _buildMovieCard(Movie movie) {
+  Widget _buildMovieCard(ShowModels movie) {
     return Card(
       color: AppColors.background,
       margin: const EdgeInsets.only(right: 16),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: SizedBox(
-          width: 150,
+          width: 170,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                movie.imagePath,
-                fit: BoxFit.contain,
+              Image.network(
+                movie.image, // Use the image URL from the API
+                fit: BoxFit.cover,
                 height: 120,
                 width: 150,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 120,
+                    width: 150,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -157,7 +179,7 @@ class CinemaPage extends StatelessWidget with MoviePosters {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.title,
+                      movie.name, // Use the name from the API
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -165,7 +187,7 @@ class CinemaPage extends StatelessWidget with MoviePosters {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${movie.year}',
+                      movie.startDate, // Use the start date from the API
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
@@ -177,7 +199,7 @@ class CinemaPage extends StatelessWidget with MoviePosters {
                         const Icon(Icons.star, color: Colors.amber, size: 16),
                         const SizedBox(width: 4),
                         Text(
-                          '${movie.rating}',
+                          movie.country ?? 'N/A', // Use the rating from the API
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
