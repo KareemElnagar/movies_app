@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/models/show_models.dart';
 
-class ShowDetailsPage extends StatelessWidget {
-  final String title;
-  final String description;
-  final String imageUrl;
+class ShowDetailsPage extends StatefulWidget {
+
+  final ShowModels showModels;
 
   const ShowDetailsPage({
     Key? key,
-    required this.title,
-    required this.description,
-    required this.imageUrl,
+    required this.showModels,
   }) : super(key: key);
 
+  @override
+  State<ShowDetailsPage> createState() => _ShowDetailsPageState();
+}
+
+class _ShowDetailsPageState extends State<ShowDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +33,7 @@ class ShowDetailsPage extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  imageUrl,
+                  widget.showModels.image,
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -38,7 +41,7 @@ class ShowDetailsPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                title,
+                widget.showModels.name,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -46,7 +49,7 @@ class ShowDetailsPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                description,
+                widget.showModels.country,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey[800],
