@@ -4,17 +4,31 @@ sealed class ShowState extends Equatable {
   final List<int> selectedSeats;
   final int ticketCount;
   final DateTime selectedDate;
-  final List<Ticket> tickets; // Add tickets property
+  final List<Ticket> tickets;
+  final String userName; // Add user name
+  final String userEmail; // Add user email
+  final File? userProfileImage; // Add user profile image
 
   const ShowState({
     this.selectedSeats = const [],
     this.ticketCount = 0,
     required this.selectedDate,
-    this.tickets = const [], // Initialize tickets
+    this.tickets = const [],
+    this.userName = 'John Doe', // Default name
+    this.userEmail = 'johndoe@example.com', // Default email
+    this.userProfileImage, // Optional profile image
   });
 
   @override
-  List<Object?> get props => [selectedSeats, ticketCount, selectedDate, tickets];
+  List<Object?> get props => [
+    selectedSeats,
+    ticketCount,
+    selectedDate,
+    tickets,
+    userName,
+    userEmail,
+    userProfileImage,
+  ];
 }
 
 final class ShowInitial extends ShowState {
@@ -23,11 +37,17 @@ final class ShowInitial extends ShowState {
     int ticketCount = 0,
     required DateTime selectedDate,
     List<Ticket> tickets = const [],
+    String userName = 'John Doe',
+    String userEmail = 'johndoe@example.com',
+    File? userProfileImage,
   }) : super(
     selectedSeats: selectedSeats,
     ticketCount: ticketCount,
     selectedDate: selectedDate,
     tickets: tickets,
+    userName: userName,
+    userEmail: userEmail,
+    userProfileImage: userProfileImage,
   );
 
   ShowInitial copyWith({
@@ -35,12 +55,18 @@ final class ShowInitial extends ShowState {
     int? ticketCount,
     DateTime? selectedDate,
     List<Ticket>? tickets,
+    String? userName,
+    String? userEmail,
+    File? userProfileImage,
   }) {
     return ShowInitial(
       selectedSeats: selectedSeats ?? this.selectedSeats,
       ticketCount: ticketCount ?? this.ticketCount,
       selectedDate: selectedDate ?? this.selectedDate,
       tickets: tickets ?? this.tickets,
+      userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
+      userProfileImage: userProfileImage ?? this.userProfileImage,
     );
   }
 }
@@ -51,11 +77,17 @@ final class ShowLoading extends ShowState {
     int ticketCount = 0,
     required DateTime selectedDate,
     List<Ticket> tickets = const [],
+    String userName = 'John Doe',
+    String userEmail = 'johndoe@example.com',
+    File? userProfileImage,
   }) : super(
     selectedSeats: selectedSeats,
     ticketCount: ticketCount,
     selectedDate: selectedDate,
     tickets: tickets,
+    userName: userName,
+    userEmail: userEmail,
+    userProfileImage: userProfileImage,
   );
 
   ShowLoading copyWith({
@@ -63,12 +95,18 @@ final class ShowLoading extends ShowState {
     int? ticketCount,
     DateTime? selectedDate,
     List<Ticket>? tickets,
+    String? userName,
+    String? userEmail,
+    File? userProfileImage,
   }) {
     return ShowLoading(
       selectedSeats: selectedSeats ?? this.selectedSeats,
       ticketCount: ticketCount ?? this.ticketCount,
       selectedDate: selectedDate ?? this.selectedDate,
       tickets: tickets ?? this.tickets,
+      userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
+      userProfileImage: userProfileImage ?? this.userProfileImage,
     );
   }
 }
@@ -82,11 +120,17 @@ final class ShowLoaded extends ShowState {
     int ticketCount = 0,
     required DateTime selectedDate,
     List<Ticket> tickets = const [],
+    String userName = 'John Doe',
+    String userEmail = 'johndoe@example.com',
+    File? userProfileImage,
   }) : super(
     selectedSeats: selectedSeats,
     ticketCount: ticketCount,
     selectedDate: selectedDate,
     tickets: tickets,
+    userName: userName,
+    userEmail: userEmail,
+    userProfileImage: userProfileImage,
   );
 
   @override
@@ -98,6 +142,9 @@ final class ShowLoaded extends ShowState {
     int? ticketCount,
     DateTime? selectedDate,
     List<Ticket>? tickets,
+    String? userName,
+    String? userEmail,
+    File? userProfileImage,
   }) {
     return ShowLoaded(
       shows: shows ?? this.shows,
@@ -105,6 +152,9 @@ final class ShowLoaded extends ShowState {
       ticketCount: ticketCount ?? this.ticketCount,
       selectedDate: selectedDate ?? this.selectedDate,
       tickets: tickets ?? this.tickets,
+      userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
+      userProfileImage: userProfileImage ?? this.userProfileImage,
     );
   }
 }
@@ -118,11 +168,17 @@ final class ShowLoadFailed extends ShowState {
     int ticketCount = 0,
     required DateTime selectedDate,
     List<Ticket> tickets = const [],
+    String userName = 'John Doe',
+    String userEmail = 'johndoe@example.com',
+    File? userProfileImage,
   }) : super(
     selectedSeats: selectedSeats,
     ticketCount: ticketCount,
     selectedDate: selectedDate,
     tickets: tickets,
+    userName: userName,
+    userEmail: userEmail,
+    userProfileImage: userProfileImage,
   );
 
   @override
@@ -134,6 +190,9 @@ final class ShowLoadFailed extends ShowState {
     int? ticketCount,
     DateTime? selectedDate,
     List<Ticket>? tickets,
+    String? userName,
+    String? userEmail,
+    File? userProfileImage,
   }) {
     return ShowLoadFailed(
       message: message ?? this.message,
@@ -141,6 +200,9 @@ final class ShowLoadFailed extends ShowState {
       ticketCount: ticketCount ?? this.ticketCount,
       selectedDate: selectedDate ?? this.selectedDate,
       tickets: tickets ?? this.tickets,
+      userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
+      userProfileImage: userProfileImage ?? this.userProfileImage,
     );
   }
 }

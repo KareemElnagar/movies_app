@@ -1,17 +1,91 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:movies_app/models/show_models.dart';
-import 'package:movies_app/services/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
-import '../utils/Ticket.dart';
+import '../models/show_models.dart'; // Import your ShowModels
+import '../services/services.dart'; // Import your services
+import '../utils/Ticket.dart'; // Import your Ticket class
 
 part 'show_state.dart';
 
 class ShowCubit extends Cubit<ShowState> {
-  ShowCubit()
-      : super(ShowInitial(
-    selectedDate: DateTime.now(), // Initialize with current date
-  ));
+  ShowCubit() : super(ShowInitial(selectedDate: DateTime.now())) {
+    _loadProfileData(); // Load profile data when the Cubit is created
+  }
+
+  // Method to load profile data from SharedPreferences
+  Future<void> _loadProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userName = prefs.getString('userName') ?? 'John Doe';
+    final userEmail = prefs.getString('userEmail') ?? 'johndoe@example.com';
+    final userProfileImagePath = prefs.getString('userProfileImagePath');
+
+    File? userProfileImage;
+    if (userProfileImagePath != null) {
+      userProfileImage = File(userProfileImagePath);
+    }
+
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      emit(currentState.copyWith(
+        userName: userName,
+        userEmail: userEmail,
+        userProfileImage: userProfileImage,
+      ));
+    } else if (currentState is ShowInitial) {
+      emit(currentState.copyWith(
+        userName: userName,
+        userEmail: userEmail,
+        userProfileImage: userProfileImage,
+      ));
+    }
+    print('Profile data loaded from SharedPreferences'); // Debug log
+  }
+
+  // Method to save profile data to SharedPreferences
+  Future<void> _saveProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userName', state.userName);
+    await prefs.setString('userEmail', state.userEmail);
+    if (state.userProfileImage != null) {
+      await prefs.setString('userProfileImagePath', state.userProfileImage!.path);
+    } else {
+      await prefs.remove('userProfileImagePath');
+    }
+    print('Profile data saved to SharedPreferences'); // Debug log
+  }
+
+  // Method to update the user's name
+  void updateUserName(String newName) {
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      emit(currentState.copyWith(userName: newName));
+    } else if (currentState is ShowInitial) {
+      emit(currentState.copyWith(userName: newName));
+    }
+    _saveProfileData(); // Save the updated name
+  }
+
+  void updateUserEmail(String newEmail) {
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      emit(currentState.copyWith(userEmail: newEmail));
+    } else if (currentState is ShowInitial) {
+      emit(currentState.copyWith(userEmail: newEmail));
+    }
+    _saveProfileData(); // Save the updated email
+  }
+
+  void updateUserProfileImage(File newImage) {
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      emit(currentState.copyWith(userProfileImage: newImage));
+    } else if (currentState is ShowInitial) {
+      emit(currentState.copyWith(userProfileImage: newImage));
+    }
+    _saveProfileData(); // Save the updated profile image
+  }
 
   // Method to load shows
   Future<void> getShows(int page) async {
@@ -20,6 +94,9 @@ class ShowCubit extends Cubit<ShowState> {
       ticketCount: state.ticketCount,
       selectedDate: state.selectedDate,
       tickets: state.tickets,
+      userName: state.userName,
+      userEmail: state.userEmail,
+      userProfileImage: state.userProfileImage,
     ));
 
     ServiceResult<List<ShowModels>> result = await ShowServices.getShow(page);
@@ -32,6 +109,9 @@ class ShowCubit extends Cubit<ShowState> {
         ticketCount: state.ticketCount,
         selectedDate: state.selectedDate,
         tickets: state.tickets,
+        userName: state.userName,
+        userEmail: state.userEmail,
+        userProfileImage: state.userProfileImage,
       ));
     } else {
       emit(ShowLoadFailed(
@@ -40,6 +120,9 @@ class ShowCubit extends Cubit<ShowState> {
         ticketCount: state.ticketCount,
         selectedDate: state.selectedDate,
         tickets: state.tickets,
+        userName: state.userName,
+        userEmail: state.userEmail,
+        userProfileImage: state.userProfileImage,
       ));
     }
   }
