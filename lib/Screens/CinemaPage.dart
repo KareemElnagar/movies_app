@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/Screens/HomePage.dart';
 import 'package:movies_app/cubit/show_cubit.dart';
 import 'package:movies_app/models/show_models.dart';
 import 'package:movies_app/utils/colors.dart';
@@ -16,7 +15,9 @@ class CinemaPage extends StatelessWidget {
           _buildHeader(),
           _buildFeatures(),
           _buildNowShowing(),
-          _buildCallToAction(),
+          _buildCinemaList(), // Add the cinema list here
+          _buildCallToAction(context),
+          SizedBox(height: 20,)
         ],
       ),
     );
@@ -125,7 +126,7 @@ class CinemaPage extends StatelessWidget {
           builder: (context, state) {
             if (state is ShowLoaded) {
               return SizedBox(
-                height: 300,
+                height: 260,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -134,8 +135,7 @@ class CinemaPage extends StatelessWidget {
                   }).toList(),
                 ),
               );
-            }
-            else if (state is ShowLoadFailed) {
+            } else if (state is ShowLoadFailed) {
               return Center(
                 child: Text('Failed to load movies: ${state.message}'),
               );
@@ -217,12 +217,83 @@ class CinemaPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCallToAction() {
+  Widget _buildCinemaList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            'Nearby Cinemas',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 150, // Adjust the height as needed
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              _buildCinemaCard('Cinema 1', 'images/sanstefano.jpg'),
+              _buildCinemaCard('Cinema 2', 'images/hollywood.jpg'),
+              _buildCinemaCard('Cinema 3', 'images/ACMI.jpg'),
+              // Add more cinemas as needed
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCinemaCard(String name, String imagePath) {
+    return Card(
+      color: AppColors.background,
+      margin: const EdgeInsets.only(right: 16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SizedBox(
+          width: 120, // Adjust the width as needed
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                height: 100,
+                width: 120,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCallToAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: ElevatedButton(
         onPressed: () {
           // Handle booking action
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Cinema Location set'),
+              duration: Duration(seconds: 2), // Display for 2 seconds
+            ),
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,

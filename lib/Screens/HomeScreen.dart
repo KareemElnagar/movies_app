@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else if (state is ShowLoading) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else if (state is ShowLoadFailed) {
           return Text("No Data");
         } else {
@@ -157,6 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   movie.name, // Use API field names
@@ -199,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildActionButtons(ShowModels movie) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ElevatedButton(
           onPressed: () {
@@ -216,7 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: const Text("Book Now"),
         ),
-        const SizedBox(width: 16),
       ],
     );
   }

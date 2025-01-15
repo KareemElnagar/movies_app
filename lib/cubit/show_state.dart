@@ -5,9 +5,9 @@ sealed class ShowState extends Equatable {
   final int ticketCount;
   final DateTime selectedDate;
   final List<Ticket> tickets;
-  final String userName; // Add user name
-  final String userEmail; // Add user email
-  final File? userProfileImage; // Add user profile image
+  final String userName; // User name (no longer tied to SharedPreferences)
+  final String userEmail; // User email (no longer tied to SharedPreferences)
+  final File? userProfileImage; // User profile image (no longer tied to SharedPreferences)
 
   const ShowState({
     this.selectedSeats = const [],
