@@ -3,9 +3,10 @@ import 'package:book_my_seat/book_my_seat.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/cubit/show_cubit.dart';
 import 'package:movies_app/utils/colors.dart';
-
 import '../models/show_models.dart';
 import '../utils/custom_paint.dart';
+import '../utils/Ticket.dart';
+import 'MyTicketPage.dart'; // Import the Ticket model
 
 class SeatSelectionPage extends StatefulWidget {
   const SeatSelectionPage({super.key, required this.movie});
@@ -25,14 +26,19 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
     DateTime.now().add(const Duration(days: 5)),
   ];
 
-  int selectedDateIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShowCubit, ShowState>(
       builder: (context, state) {
         if (state is ShowLoaded) {
           final selectedShow = widget.movie;
+          final selectedSeats = state.selectedSeats;
+          final selectedDate = state.selectedDate;
+
+          // Calculate total price
+          final double seatPrice = 15.00; // Price per seat
+          final double totalPrice = selectedSeats.length * seatPrice;
+
           return Scaffold(
             appBar: AppBar(
               iconTheme: const IconThemeData(
@@ -57,17 +63,16 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                         children: dates.asMap().entries.map((entry) {
                           final index = entry.key;
                           final date = entry.value;
+                          final isSelected = date == selectedDate;
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedDateIndex = index;
-                              });
+                              context.read<ShowCubit>().updateSelectedDate(date);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(right: 16),
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: selectedDateIndex == index
+                                color: isSelected
                                     ? AppColors.primary
                                     : Colors.grey[200],
                                 borderRadius: BorderRadius.circular(8),
@@ -78,7 +83,7 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                                     _getDayOfWeek(date.weekday),
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: selectedDateIndex == index
+                                      color: isSelected
                                           ? Colors.white
                                           : Colors.black,
                                     ),
@@ -88,7 +93,7 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                                     date.day.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: selectedDateIndex == index
+                                      color: isSelected
                                           ? Colors.white
                                           : Colors.black,
                                     ),
@@ -137,7 +142,6 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                     // Seat Layout
                     SeatLayoutWidget(
                       stateModel: const SeatLayoutStateModel(
-
                         rows: 10,
                         cols: 7,
                         seatSvgSize: 45,
@@ -268,8 +272,12 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                         ],
                         pathUnSelectedSeat: 'images/seatwhite.svg',
                       ),
-                      onSeatStateChanged:
-                          (int rowI, int colI, SeatState currentState) {},
+                      onSeatStateChanged: (int row, int col, SeatState currentState) {
+                        final seatId = row * 7 + col + 1; // Assuming 7 columns
+                        if (currentState == SeatState.selected || currentState == SeatState.unselected) {
+                          context.read<ShowCubit>().toggleSeatSelection(seatId);
+                        }
+                      },
                     ),
                     const SizedBox(height: 16),
 
@@ -326,8 +334,43 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                             Center(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Handle buy ticket action
-                                  print('Buy Ticket');
+                                  if (selectedSeats.isNotEmpty) {
+                                    // Create a Ticket object
+                                    final ticket = Ticket(
+                                      movieTitle: selectedShow.name,
+                                      date: selectedDate.toLocal().toString(),
+                                      time: '18:50 p.m', // Example: Hardcoded time
+                                      row: '2', // Example: Hardcoded row
+                                      seats: selectedSeats,
+                                      addOns: {'POP CORN(1)': 5.0}, // Example: Hardcoded add-ons
+                                      price: totalPrice,
+                                    );
+
+                                    // Add the ticket to the state
+                                    context.read<ShowCubit>().addTicket(ticket);
+                                    context.read<ShowCubit>().resetSelection();
+
+                                    // Show a success message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Ticket purchased successfully!'),
+                                      ),
+                                    );
+
+                                    // Navigate to MyTicketPage
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MyTicketPage(),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Please select at least one seat.'),
+                                      ),
+                                    );
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
@@ -338,9 +381,9 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Buy Ticket \$15.00',
-                                  style: TextStyle(
+                                child: Text(
+                                  'Buy Ticket \$${totalPrice.toStringAsFixed(2)}',
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -351,15 +394,12 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                         ),
                       ),
                     ),
-
-                    // Buy Ticket Button
                   ],
                 ),
               ),
             ),
           );
-        }
-        else if (state is ShowLoadFailed) {
+        } else if (state is ShowLoadFailed) {
           return Center(
             child: Text('Failed to load Show: ${state.message}'),
           );

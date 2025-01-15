@@ -14,6 +14,6 @@ class Ticket {
     required this.row,
     required this.seats,
     required this.addOns,
-    required this.price
+    required this.price,
   });
 }

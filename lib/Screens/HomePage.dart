@@ -113,6 +113,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // refactor to be full function [MyTickets page,]
+  // read bloc docs
+
   Widget _buildNotificationMenu() {
     return PopupMenuButton<NotificationMenuModel>(
       icon: const FaIcon(FontAwesomeIcons.bell, color: AppColors.text),
