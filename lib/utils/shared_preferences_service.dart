@@ -1,11 +1,40 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
+
+import 'Ticket.dart';
 
 class SharedPreferencesService {
   // Keys for SharedPreferences
   static const String _keyUserName = 'userName';
   static const String _keyUserEmail = 'userEmail';
   static const String _keyUserProfileImagePath = 'userProfileImagePath';
+  static const String _keyTickets = 'bookedTickets';
+
+  // Save tickets to SharedPreferences
+  Future<void> saveTickets(List<Ticket> tickets) async {
+    final prefs = await SharedPreferences.getInstance();
+    final ticketsJson = tickets.map((ticket) => ticket.toJson()).toList();
+    await prefs.setString(_keyTickets, jsonEncode(ticketsJson));
+    print('Tickets saved to SharedPreferences'); // Debug log
+  }
+
+  // Load tickets from SharedPreferences
+  Future<List<Ticket>> loadTickets() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ticketsJson = prefs.getString(_keyTickets);
+
+    if (ticketsJson != null) {
+      final List<dynamic> decodedJson = jsonDecode(ticketsJson);
+      final tickets = decodedJson.map((json) => Ticket.fromJson(json)).toList();
+      print('Tickets loaded from SharedPreferences'); // Debug log
+      return tickets;
+    } else {
+      print('No tickets found in SharedPreferences'); // Debug log
+      return [];
+    }
+  }
 
   // Save user profile data to SharedPreferences
   Future<void> saveUserProfile({

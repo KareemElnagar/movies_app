@@ -4,13 +4,53 @@ import 'dart:io';
 
 import '../models/show_models.dart'; // Import your ShowModels
 import '../services/services.dart'; // Import your services
-import '../utils/Ticket.dart'; // Import your Ticket class
+import '../utils/Ticket.dart';
+import '../utils/shared_preferences_service.dart'; // Import your Ticket class
 
 part 'show_state.dart';
 
 class ShowCubit extends Cubit<ShowState> {
-  ShowCubit() : super(ShowInitial(selectedDate: DateTime.now()));
+  final SharedPreferencesService _prefsService = SharedPreferencesService();
 
+  ShowCubit() : super(ShowInitial(selectedDate: DateTime.now())){
+    _loadTickets();
+  }
+
+  // Method to load tickets from SharedPreferences
+  Future<void> _loadTickets() async {
+    final tickets = await _prefsService.loadTickets();
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      emit(currentState.copyWith(tickets: tickets));
+    } else if (currentState is ShowInitial) {
+      emit(currentState.copyWith(tickets: tickets));
+    }
+    print('Tickets loaded into state: ${tickets.length}'); // Debug log
+  }
+
+  // Method to save tickets to SharedPreferences
+  Future<void> _saveTickets(List<Ticket> tickets) async {
+    await _prefsService.saveTickets(tickets);
+  }
+
+  // Method to add a ticket
+  void addTicket(Ticket ticket) {
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      final tickets = List<Ticket>.from(currentState.tickets)..add(ticket);
+      emit(currentState.copyWith(tickets: tickets));
+      _saveTickets(tickets); // Save the updated tickets
+    }
+  }
+
+  // Method to get all tickets
+  List<Ticket> get tickets {
+    final currentState = state;
+    if (currentState is ShowLoaded) {
+      return currentState.tickets;
+    }
+    return [];
+  }
   // Method to load shows
   Future<void> getShows(int page) async {
     emit(ShowLoading(
@@ -89,24 +129,6 @@ class ShowCubit extends Cubit<ShowState> {
     if (currentState is ShowLoaded) {
       emit(currentState.copyWith(selectedSeats: [], ticketCount: 0));
     }
-  }
-
-  // Method to add a ticket
-  void addTicket(Ticket ticket) {
-    final currentState = state;
-    if (currentState is ShowLoaded) {
-      final tickets = List<Ticket>.from(currentState.tickets)..add(ticket);
-      emit(currentState.copyWith(tickets: tickets));
-    }
-  }
-
-  // Method to get all tickets
-  List<Ticket> get tickets {
-    final currentState = state;
-    if (currentState is ShowLoaded) {
-      return currentState.tickets;
-    }
-    return [];
   }
 
   // Method to update user profile data (no longer tied to SharedPreferences)

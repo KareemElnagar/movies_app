@@ -16,4 +16,30 @@ class Ticket {
     required this.addOns,
     required this.price,
   });
+
+  // Convert Ticket to a Map (for JSON serialization)
+  Map<String, dynamic> toJson() {
+    return {
+      'movieTitle': movieTitle,
+      'date': date,
+      'time': time,
+      'row': row,
+      'seats': seats,
+      'addOns': addOns,
+      'price': price,
+    };
+  }
+
+  // Create a Ticket from a Map (for JSON deserialization)
+  factory Ticket.fromJson(Map<String, dynamic> json) {
+    return Ticket(
+      movieTitle: json['movieTitle'],
+      date: json['date'],
+      time: json['time'],
+      row: json['row'],
+      seats: List<int>.from(json['seats']),
+      addOns: Map<String, double>.from(json['addOns']),
+      price: json['price'],
+    );
+  }
 }
