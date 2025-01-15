@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else if (state is ShowLoading) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else if (state is ShowLoadFailed) {
           return Text("No Data");
         } else {
@@ -155,34 +155,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  movie.name, // Use API field names
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  movie.network ?? 'N/A', // Handle nullable fields
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  movie.country ?? 'N/A', // Handle nullable fields
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  movie.startDate ?? 'No summary available',
-                  // Handle nullable fields
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-                const SizedBox(height: 16),
-                _buildActionButtons(movie),
-                const SizedBox(height: 40),
-              ],
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    movie.name, // Use API field names
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    movie.network ?? 'N/A', // Handle nullable fields
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    movie.country ?? 'N/A', // Handle nullable fields
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    movie.startDate ?? 'No summary available',
+                    // Handle nullable fields
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildActionButtons(movie),
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
           );
         } else if (state is ShowLoadFailed) {
@@ -199,6 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildActionButtons(ShowModels movie) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ElevatedButton(
           onPressed: () {
@@ -216,7 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: const Text("Book Now"),
         ),
-        const SizedBox(width: 16),
       ],
     );
   }

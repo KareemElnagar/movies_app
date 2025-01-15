@@ -1,92 +1,56 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 import '../models/show_models.dart'; // Import your ShowModels
 import '../services/services.dart'; // Import your services
-import '../utils/Ticket.dart'; // Import your Ticket class
+import '../utils/Ticket.dart';
+import '../utils/shared_preferences_service.dart'; // Import your Ticket class
 
 part 'show_state.dart';
 
 class ShowCubit extends Cubit<ShowState> {
-  ShowCubit() : super(ShowInitial(selectedDate: DateTime.now())) {
-    _loadProfileData(); // Load profile data when the Cubit is created
+  final SharedPreferencesService _prefsService = SharedPreferencesService();
+
+  ShowCubit() : super(ShowInitial(selectedDate: DateTime.now())){
+    _loadTickets();
   }
 
-  // Method to load profile data from SharedPreferences
-  Future<void> _loadProfileData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userName = prefs.getString('userName') ?? 'John Doe';
-    final userEmail = prefs.getString('userEmail') ?? 'johndoe@example.com';
-    final userProfileImagePath = prefs.getString('userProfileImagePath');
-
-    File? userProfileImage;
-    if (userProfileImagePath != null) {
-      userProfileImage = File(userProfileImagePath);
-    }
-
+  // Method to load tickets from SharedPreferences
+  Future<void> _loadTickets() async {
+    final tickets = await _prefsService.loadTickets();
     final currentState = state;
     if (currentState is ShowLoaded) {
-      emit(currentState.copyWith(
-        userName: userName,
-        userEmail: userEmail,
-        userProfileImage: userProfileImage,
-      ));
+      emit(currentState.copyWith(tickets: tickets));
     } else if (currentState is ShowInitial) {
-      emit(currentState.copyWith(
-        userName: userName,
-        userEmail: userEmail,
-        userProfileImage: userProfileImage,
-      ));
+      emit(currentState.copyWith(tickets: tickets));
     }
-    print('Profile data loaded from SharedPreferences'); // Debug log
+    print('Tickets loaded into state: ${tickets.length}'); // Debug log
   }
 
-  // Method to save profile data to SharedPreferences
-  Future<void> _saveProfileData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userName', state.userName);
-    await prefs.setString('userEmail', state.userEmail);
-    if (state.userProfileImage != null) {
-      await prefs.setString('userProfileImagePath', state.userProfileImage!.path);
-    } else {
-      await prefs.remove('userProfileImagePath');
-    }
-    print('Profile data saved to SharedPreferences'); // Debug log
+  // Method to save tickets to SharedPreferences
+  Future<void> _saveTickets(List<Ticket> tickets) async {
+    await _prefsService.saveTickets(tickets);
   }
 
-  // Method to update the user's name
-  void updateUserName(String newName) {
+  // Method to add a ticket
+  void addTicket(Ticket ticket) {
     final currentState = state;
     if (currentState is ShowLoaded) {
-      emit(currentState.copyWith(userName: newName));
-    } else if (currentState is ShowInitial) {
-      emit(currentState.copyWith(userName: newName));
+      final tickets = List<Ticket>.from(currentState.tickets)..add(ticket);
+      emit(currentState.copyWith(tickets: tickets));
+      _saveTickets(tickets); // Save the updated tickets
     }
-    _saveProfileData(); // Save the updated name
   }
 
-  void updateUserEmail(String newEmail) {
+  // Method to get all tickets
+  List<Ticket> get tickets {
     final currentState = state;
     if (currentState is ShowLoaded) {
-      emit(currentState.copyWith(userEmail: newEmail));
-    } else if (currentState is ShowInitial) {
-      emit(currentState.copyWith(userEmail: newEmail));
+      return currentState.tickets;
     }
-    _saveProfileData(); // Save the updated email
+    return [];
   }
-
-  void updateUserProfileImage(File newImage) {
-    final currentState = state;
-    if (currentState is ShowLoaded) {
-      emit(currentState.copyWith(userProfileImage: newImage));
-    } else if (currentState is ShowInitial) {
-      emit(currentState.copyWith(userProfileImage: newImage));
-    }
-    _saveProfileData(); // Save the updated profile image
-  }
-
   // Method to load shows
   Future<void> getShows(int page) async {
     emit(ShowLoading(
@@ -167,21 +131,25 @@ class ShowCubit extends Cubit<ShowState> {
     }
   }
 
-  // Method to add a ticket
-  void addTicket(Ticket ticket) {
+  // Method to update user profile data (no longer tied to SharedPreferences)
+  void updateUserProfile({
+    String? userName,
+    String? userEmail,
+    File? userProfileImage,
+  }) {
     final currentState = state;
     if (currentState is ShowLoaded) {
-      final tickets = List<Ticket>.from(currentState.tickets)..add(ticket);
-      emit(currentState.copyWith(tickets: tickets));
+      emit(currentState.copyWith(
+        userName: userName ?? currentState.userName,
+        userEmail: userEmail ?? currentState.userEmail,
+        userProfileImage: userProfileImage ?? currentState.userProfileImage,
+      ));
+    } else if (currentState is ShowInitial) {
+      emit(currentState.copyWith(
+        userName: userName ?? currentState.userName,
+        userEmail: userEmail ?? currentState.userEmail,
+        userProfileImage: userProfileImage ?? currentState.userProfileImage,
+      ));
     }
-  }
-
-  // Method to get all tickets
-  List<Ticket> get tickets {
-    final currentState = state;
-    if (currentState is ShowLoaded) {
-      return currentState.tickets;
-    }
-    return [];
   }
 }

@@ -12,6 +12,15 @@ import 'package:movies_app/utils/Ticket.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/cubit/show_cubit.dart';
 
+import 'package:flutter/material.dart';
+import 'package:movie_ticket_card/movie_ticket_card.dart';
+import 'package:movies_app/utils/colors.dart';
+import 'package:movies_app/utils/Ticket.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/cubit/show_cubit.dart';
+
+import '../utils/shared_preferences_service.dart';
+
 class MyTicketPage extends StatelessWidget {
   const MyTicketPage({super.key});
 
@@ -22,6 +31,8 @@ class MyTicketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SharedPreferencesService _prefsService = SharedPreferencesService();
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
@@ -33,11 +44,16 @@ class MyTicketPage extends StatelessWidget {
           style: TextStyle(color: AppColors.text),
         ),
       ),
-      body: BlocBuilder<ShowCubit, ShowState>(
-        builder: (context, state) {
-          final tickets = state.tickets;
-
-          if (tickets.isEmpty) {
+      body: FutureBuilder<List<Ticket>>(
+        future: _prefsService.loadTickets(), // Load tickets directly
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error loading tickets: ${snapshot.error}'),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
                 'No Tickets',
@@ -50,6 +66,7 @@ class MyTicketPage extends StatelessWidget {
             );
           }
 
+          final tickets = snapshot.data!;
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: tickets.length,
